@@ -1,0 +1,38 @@
+{
+  "conversion": {
+    "absolute_effect": 0.0011518730521316279,
+    "ci_high": 0.0012192415519387749,
+    "ci_low": 0.0010845045523244809,
+    "control_rate": 0.0019375880152813366,
+    "incremental_outcomes_per_100k_assigned": 115.18730521316279,
+    "mde_80_power_absolute": 9.228077217163973e-05,
+    "number_needed_to_assign": 868.151223912587,
+    "p_value": 3.194105972880377e-246,
+    "relative_effect": 0.594488117725262,
+    "standard_error": 3.437168357507502e-05,
+    "treatment_rate": 0.0030894610674129645
+  },
+  "exposure_first_stage": 0.036036727482199896,
+  "interpretation": {
+    "itt": "Primary causal estimate: effect of assignment, preserving randomization.",
+    "iv": "Wald scaling is descriptive and requires exclusion, monotonicity, and instrument relevance assumptions.",
+    "per_protocol": "Not reported as causal because observed exposure is post-treatment selection."
+  },
+  "iv_complier_effect": {
+    "conversion": 0.031963863885825596,
+    "visit": 0.28699618005843747
+  },
+  "visit": {
+    "absolute_effect": 0.010342403129198284,
+    "ci_high": 0.010629183314336037,
+    "ci_low": 0.010055622944060531,
+    "control_rate": 0.03820095691954503,
+    "incremental_outcomes_per_100k_assigned": 1034.2403129198285,
+    "mde_80_power_absolute": 0.00040223600391407354,
+    "number_needed_to_assign": 96.68932718130446,
+    "p_value": 0.0,
+    "relative_effect": 0.27073675539019615,
+    "standard_error": 0.00014631642098864926,
+    "treatment_rate": 0.048543360048743316
+  }
+}
