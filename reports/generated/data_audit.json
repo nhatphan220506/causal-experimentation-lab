@@ -1,0 +1,119 @@
+{
+  "covariate_balance": [
+    {
+      "control_mean": 19.651704714722086,
+      "control_missing": 0,
+      "feature": "f0",
+      "smd": -0.006865619284746129,
+      "treatment_mean": 19.61475504041621,
+      "treatment_missing": 0
+    },
+    {
+      "control_mean": 10.067935425593191,
+      "control_missing": 0,
+      "feature": "f1",
+      "smd": 0.023994393639903775,
+      "treatment_mean": 10.07033670007575,
+      "treatment_missing": 0
+    },
+    {
+      "control_mean": 8.44817310403252,
+      "control_missing": 0,
+      "feature": "f2",
+      "smd": -0.006240988922809455,
+      "treatment_mean": 8.44630157840937,
+      "treatment_missing": 0
+    },
+    {
+      "control_mean": 4.2328209958237215,
+      "control_missing": 0,
+      "feature": "f3",
+      "smd": -0.048836340314695484,
+      "treatment_mean": 4.169411678218035,
+      "treatment_missing": 0
+    },
+    {
+      "control_mean": 10.336525673187094,
+      "control_missing": 0,
+      "feature": "f4",
+      "smd": 0.007965661188646321,
+      "treatment_mean": 10.339245228006591,
+      "treatment_missing": 0
+    },
+    {
+      "control_mean": 4.039338816435026,
+      "control_missing": 0,
+      "feature": "f5",
+      "smd": -0.030556830484441428,
+      "treatment_mean": 4.026602473530316,
+      "treatment_missing": 0
+    },
+    {
+      "control_mean": -3.9998797255387486,
+      "control_missing": 0,
+      "feature": "f6",
+      "smd": -0.040448068796990026,
+      "treatment_mean": -4.182792391369486,
+      "treatment_missing": 0
+    },
+    {
+      "control_mean": 5.0802842990151795,
+      "control_missing": 0,
+      "feature": "f7",
+      "smd": 0.021269530222497012,
+      "treatment_mean": 5.105555292498397,
+      "treatment_missing": 0
+    },
+    {
+      "control_mean": 3.934651747404471,
+      "control_missing": 0,
+      "feature": "f8",
+      "smd": -0.02243333587423457,
+      "treatment_mean": 3.9333918541197255,
+      "treatment_missing": 0
+    },
+    {
+      "control_mean": 15.886252509894565,
+      "control_missing": 0,
+      "feature": "f9",
+      "smd": 0.024001057714079402,
+      "treatment_mean": 16.052588743700383,
+      "treatment_missing": 0
+    },
+    {
+      "control_mean": 5.3318980999764785,
+      "control_missing": 0,
+      "feature": "f10",
+      "smd": 0.01056346198833559,
+      "treatment_mean": 5.333659813635423,
+      "treatment_missing": 0
+    },
+    {
+      "control_mean": -0.17086774869046706,
+      "control_missing": 0,
+      "feature": "f11",
+      "smd": -0.005159528555697991,
+      "treatment_mean": -0.17098480631124308,
+      "treatment_missing": 0
+    }
+  ],
+  "max_absolute_smd": 0.048836340314695484,
+  "source": "Criteo Uplift Prediction Dataset v2.1 (corrected)",
+  "srm": {
+    "chi_square": 1.817775848947767e-06,
+    "expected_treatment_share": 0.85,
+    "note": "The published assignment ratio is approximate; inspect practical deviation with p-value.",
+    "p_value": 0.9989242531217909
+  },
+  "summary": {
+    "control_exposed": 0,
+    "conversion_rate": 0.002916680257907384,
+    "conversion_without_visit": 0,
+    "exposure_rate": 0.03063122299992732,
+    "n": 13979592,
+    "n_control": 2096937,
+    "n_treatment": 11882655,
+    "treatment_share": 0.8500001287591226,
+    "visit_rate": 0.046992000911042324
+  }
+}

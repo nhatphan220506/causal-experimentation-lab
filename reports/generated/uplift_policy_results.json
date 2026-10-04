@@ -1,0 +1,172 @@
+{
+  "deciles": [
+    {
+      "decile": 10,
+      "ipw_observed_effect": 0.05792317988406583,
+      "mean_predicted_uplift": 0.07129749530606136,
+      "n": 300000,
+      "standard_error": 0.0026355814241551733
+    },
+    {
+      "decile": 9,
+      "ipw_observed_effect": 0.009142474875086737,
+      "mean_predicted_uplift": 0.009990148586233767,
+      "n": 300000,
+      "standard_error": 0.001284398760830218
+    },
+    {
+      "decile": 8,
+      "ipw_observed_effect": 0.0015114739922391725,
+      "mean_predicted_uplift": 0.002298876620753149,
+      "n": 300000,
+      "standard_error": 0.0006422429354024737
+    },
+    {
+      "decile": 7,
+      "ipw_observed_effect": 0.0005032135537792843,
+      "mean_predicted_uplift": 0.0008709424395512035,
+      "n": 300000,
+      "standard_error": 0.00039870241001254715
+    },
+    {
+      "decile": 6,
+      "ipw_observed_effect": 0.0007476357952971593,
+      "mean_predicted_uplift": 0.0004621427044686711,
+      "n": 300000,
+      "standard_error": 0.0002381224469356959
+    },
+    {
+      "decile": 5,
+      "ipw_observed_effect": 0.000498642124680243,
+      "mean_predicted_uplift": 0.00031552076326010205,
+      "n": 300000,
+      "standard_error": 0.00019516837257595887
+    },
+    {
+      "decile": 4,
+      "ipw_observed_effect": 0.0001012263853756491,
+      "mean_predicted_uplift": 0.0002230936863213077,
+      "n": 300000,
+      "standard_error": 0.00019975111425659127
+    },
+    {
+      "decile": 3,
+      "ipw_observed_effect": 0.0001068618422869533,
+      "mean_predicted_uplift": 0.00011257396469620707,
+      "n": 300000,
+      "standard_error": 0.00022681352660956308
+    },
+    {
+      "decile": 2,
+      "ipw_observed_effect": 1.2598632375075643e-06,
+      "mean_predicted_uplift": -7.32392701598462e-05,
+      "n": 300000,
+      "standard_error": 0.0002999462773132719
+    },
+    {
+      "decile": 1,
+      "ipw_observed_effect": 0.0035472216803641337,
+      "mean_predicted_uplift": -0.007431619089805236,
+      "n": 300000,
+      "standard_error": 0.0014507826870839816
+    }
+  ],
+  "diagnostics": {
+    "cross_fitted_conversion_dr_ate": 0.0009564510638627883,
+    "cross_fitted_conversion_dr_standard_error": 7.382823032407313e-05,
+    "cross_fitted_dr_ate": 0.007281852827144777,
+    "cross_fitted_dr_standard_error": 0.00027584259508782515,
+    "evaluation_marginal_propensity": 0.85,
+    "evaluation_rows": 3000000,
+    "out_of_sample_observed_auc": 0.9459049702877405,
+    "out_of_sample_observed_log_loss": 0.10343246810844024,
+    "propensity_auc": 0.5099810578636166,
+    "propensity_p01": 0.8436277607717341,
+    "propensity_p99": 0.8961650524941056,
+    "train_rows": 3000000,
+    "uplift_correlation_with_ipw_score": 0.038082580217537174,
+    "warning": "Individual uplift is not directly observed. Ranking is evaluated only on the untouched holdout with randomized-treatment IPW estimates; decile noise must remain visible."
+  },
+  "policy_curve": [
+    {
+      "incremental_visits_per_100k_eligible": 579.4513531327474,
+      "incremental_visits_per_100k_targeted": 5794.513531327473,
+      "n": 300000,
+      "standard_error": 0.0026354883648101513,
+      "subgroup_ate": 0.057945135313274734,
+      "target_fraction": 0.1
+    },
+    {
+      "incremental_visits_per_100k_eligible": 670.6565475915259,
+      "incremental_visits_per_100k_targeted": 3353.282737957629,
+      "n": 600000,
+      "standard_error": 0.001466281114655311,
+      "subgroup_ate": 0.03353282737957629,
+      "target_fraction": 0.2
+    },
+    {
+      "incremental_visits_per_100k_eligible": 685.771287513918,
+      "incremental_visits_per_100k_targeted": 2285.9042917130596,
+      "n": 900000,
+      "standard_error": 0.001000814674737359,
+      "subgroup_ate": 0.022859042917130597,
+      "target_fraction": 0.30000000000000004
+    },
+    {
+      "incremental_visits_per_100k_eligible": 690.8034230517108,
+      "incremental_visits_per_100k_targeted": 1727.0085576292768,
+      "n": 1200000,
+      "standard_error": 0.0007572516213088315,
+      "subgroup_ate": 0.017270085576292768,
+      "target_fraction": 0.4
+    },
+    {
+      "incremental_visits_per_100k_eligible": 698.2797810046821,
+      "incremental_visits_per_100k_targeted": 1396.5595620093643,
+      "n": 1500000,
+      "standard_error": 0.0006076942943417642,
+      "subgroup_ate": 0.013965595620093644,
+      "target_fraction": 0.5
+    },
+    {
+      "incremental_visits_per_100k_eligible": 703.2662022514847,
+      "incremental_visits_per_100k_targeted": 1172.110337085808,
+      "n": 1800000,
+      "standard_error": 0.0005074692716818666,
+      "subgroup_ate": 0.01172110337085808,
+      "target_fraction": 0.6
+    },
+    {
+      "incremental_visits_per_100k_eligible": 704.4609678381177,
+      "incremental_visits_per_100k_targeted": 1006.3728111973109,
+      "n": 2100000,
+      "standard_error": 0.00043590579833307645,
+      "subgroup_ate": 0.010063728111973109,
+      "target_fraction": 0.7000000000000001
+    },
+    {
+      "incremental_visits_per_100k_eligible": 705.3470845281108,
+      "incremental_visits_per_100k_targeted": 881.6838556601385,
+      "n": 2400000,
+      "standard_error": 0.0003824861176272028,
+      "subgroup_ate": 0.008816838556601385,
+      "target_fraction": 0.8
+    },
+    {
+      "incremental_visits_per_100k_eligible": 705.5774975884987,
+      "incremental_visits_per_100k_targeted": 783.974997320554,
+      "n": 2700000,
+      "standard_error": 0.00034161277074449647,
+      "subgroup_ate": 0.00783974997320554,
+      "target_fraction": 0.9
+    },
+    {
+      "incremental_visits_per_100k_eligible": 740.8318999641269,
+      "incremental_visits_per_100k_targeted": 740.8318999641269,
+      "n": 3000000,
+      "standard_error": 0.0003399696548438964,
+      "subgroup_ate": 0.00740831899964127,
+      "target_fraction": 1.0
+    }
+  ]
+}
