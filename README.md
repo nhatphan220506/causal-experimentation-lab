@@ -1,6 +1,6 @@
 # Causal Experimentation Lab
 
-[![quality](https://github.com/nhatphan220506/causal-experimentation-lab/actions/workflows/ci.yml/badge.svg)](https://github.com/nhatphan220506/causal-experimentation-lab/actions/workflows/ci.yml)
+[![quality](https://github.com/thvh2006/causal-experimentation-lab/actions/workflows/ci.yml/badge.svg)](https://github.com/thvh2006/causal-experimentation-lab/actions/workflows/ci.yml)
 
 A decision-grade causal analysis of **13,979,592 observations from real randomized
 incrementality trials**: assignment audit, intention-to-treat effects, exposure/IV
@@ -140,4 +140,3 @@ no trial/user/time IDs, no treatment cost, no monetary value and no customer-har
 metrics. Trial-level transport, retention, delayed outcomes, interference and ROI
 cannot be recovered. The uplift ranking is validated on a holdout from the same
 source and still requires independent replication.
-
