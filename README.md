@@ -10,8 +10,9 @@ a production experimentation-system design.
 > **Status:** complete and reproducible. This project uses real randomized data;
 > it does not claim that the repository itself ran in production.
 
-**Start here:** [`CASE_STUDY.md`](CASE_STUDY.md) contains the full reasoning chain.
-Open [`dashboard/index.html`](dashboard/index.html) for the reviewer dashboard.
+**[Open the interactive causal decision console](https://thvh2006.github.io/causal-experimentation-lab/)** ·
+[Full case study](CASE_STUDY.md) ·
+[Experiment platform design](docs/experiment_platform_design.md)
 
 ## Decision question
 
