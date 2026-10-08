@@ -22,19 +22,22 @@ targeted with an uplift policy?
 
 ## Executive answer
 
-Treatment has a positive average causal effect under both pooled and adjusted
-estimators. A holdout-validated uplift model identifies a much more responsive top
-decile, but broad treatment creates greater total impact when treatment is free.
+Treatment has a positive average causal effect under pooled, holdout, and adjusted
+estimators. The pooled and holdout raw ITT estimates reconcile, but the cross-fitted
+adjusted estimate is materially smaller. That unresolved estimator gap is now an
+explicit validity gate—not a footnote. A holdout-validated uplift model identifies a
+responsive top decile, but it does not identify a harmed subgroup reliably.
 
 | Result | Estimate | Decision meaning |
 |---|---:|---|
 | Pooled visit ITT | **+1.034 pp** | +1,034 visits / 100k assigned |
 | Pooled conversion ITT | **+0.115 pp** | +115 conversions / 100k assigned |
-| Cross-fitted adjusted visit effect | **+0.728 pp** | direction survives adjustment |
-| Cross-fitted adjusted conversion effect | **+0.096 pp** | downstream benefit survives adjustment |
-| Top-decile holdout visit effect | **+5.79 pp** | strong option under 10% capacity |
-| Top 10% efficiency | **+5,795 / 100k treated** | about 7.8× broad-policy efficiency |
-| Broad-policy total impact | **+741 / 100k eligible** | greater total gain absent cost/harm |
+| Holdout raw visit ITT | **+1.016 pp** | reconciles with the +1.034 pp full-sample ITT |
+| Cross-fitted adjusted visit effect | **+0.722 pp** | positive, but does not reconcile in magnitude |
+| Cross-fitted adjusted conversion effect | **+0.097 pp** | positive sensitivity estimate |
+| Top-decile holdout visit effect | **+8.53 pp** | promising capacity policy, not deployment proof |
+| Bottom predicted decile | **−0.74 pp predicted / +0.35 pp observed** | model cannot identify harm |
+| Broad-policy holdout impact | **+1,016 / 100k eligible** | largest total gain absent cost/harm |
 
 ![Holdout-validated uplift](reports/figures/03_holdout_uplift_deciles.png)
 
@@ -44,7 +47,10 @@ decile, but broad treatment creates greater total impact when treatment is free.
   pre-treatment covariates before reading lift.
 - Preserves assignment as the causal estimand and rejects exposed/unexposed
   comparison as post-treatment selection.
-- Reports pooled ITT beside cross-fitted doubly robust sensitivity estimates.
+- Uses the known 85/15 assignment probability for primary IPW/AIPW estimates;
+  learned propensity is retained as a diagnostic only.
+- Reconciles full-sample ITT with raw holdout ITT, and flags the remaining
+  raw-versus-adjusted gap rather than explaining it away.
 - Discovers and fixes treatment-block row ordering before model training.
 - Trains on 3M rows and evaluates targeting on a disjoint 3M randomized holdout.
 - Separates observed-outcome AUC from causal ranking quality.
@@ -113,7 +119,7 @@ available as `make audit`, `make ate`, `make uplift`, `make figures`, and `make 
 src/
   audit.py                 full-data assignment and balance checks
   estimate_ate.py          pooled ITT, confidence intervals and MDE
-  uplift_policy.py         honest T-learner, propensity, DR and policy frontier
+  uplift_policy.py         honest T-learner, known-propensity DR and policy frontier
   build_figures.py         publication-ready evidence charts
   build_dashboard.py       self-contained reviewer dashboard
 docs/                      estimand, research, platform and decision contracts
@@ -140,4 +146,6 @@ The data are advertising—not a product checkout test—and have anonymised fea
 no trial/user/time IDs, no treatment cost, no monetary value and no customer-harm
 metrics. Trial-level transport, retention, delayed outcomes, interference and ROI
 cannot be recovered. The uplift ranking is validated on a holdout from the same
-source and still requires independent replication.
+source and still requires independent replication. Trial identifiers and
+randomization strata are unavailable, so the adjusted-estimator gap blocks
+production promotion until the assignment mechanism can be reconstructed.

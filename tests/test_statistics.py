@@ -2,6 +2,7 @@ import numpy as np
 import pytest
 
 from src.statistics import (
+    augmented_ipw_score,
     difference_in_proportions,
     ipw_subgroup_effect,
     srm_test,
@@ -38,3 +39,29 @@ def test_ipw_recovers_randomized_effect():
     effect, se, used = ipw_subgroup_effect(outcome, treatment, np.ones(n, dtype=bool), p)
     assert used == n
     assert abs(effect - 0.03) < 4 * se
+
+
+def test_aipw_recovers_randomized_effect_with_misspecified_outcome_models():
+    rng = np.random.default_rng(7)
+    n = 400_000
+    propensity = 0.85
+    treatment = rng.binomial(1, propensity, n)
+    potential_control = rng.binomial(1, 0.08, n)
+    potential_treated = rng.binomial(1, 0.11, n)
+    outcome = np.where(treatment == 1, potential_treated, potential_control)
+    # Deliberately poor nuisance models: known randomization should still protect
+    # the AIPW estimate in expectation.
+    score = augmented_ipw_score(
+        outcome,
+        treatment,
+        np.full(n, 0.05),
+        np.full(n, 0.14),
+        propensity,
+    )
+    standard_error = score.std(ddof=1) / np.sqrt(n)
+    assert abs(score.mean() - 0.03) < 4 * standard_error
+
+
+def test_aipw_rejects_invalid_propensity():
+    with pytest.raises(ValueError, match="strictly between"):
+        augmented_ipw_score([0, 1], [0, 1], [0.1, 0.1], [0.2, 0.2], 1.0)

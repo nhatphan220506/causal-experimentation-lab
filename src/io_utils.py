@@ -7,7 +7,7 @@ from src.config import DATA_PATH, PARQUET_PATH
 
 
 def require_data() -> None:
-    if not DATA_PATH.exists():
+    if not DATA_PATH.exists() and not PARQUET_PATH.exists():
         raise FileNotFoundError("Run `python -m src.download_data` first.")
 
 

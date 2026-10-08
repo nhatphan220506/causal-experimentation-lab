@@ -61,3 +61,30 @@ def ipw_subgroup_effect(y, treatment, selected, propensity: float) -> tuple[floa
     if chosen.size < 2:
         return np.nan, np.nan, int(chosen.size)
     return float(chosen.mean()), float(chosen.std(ddof=1) / np.sqrt(chosen.size)), int(chosen.size)
+
+
+def augmented_ipw_score(y, treatment, mu0, mu1, propensity: float) -> np.ndarray:
+    """Return the AIPW influence score for a binary randomized treatment.
+
+    For an RCT, ``propensity`` should be the known assignment probability rather
+    than a model fitted to treatment.  Keeping this calculation in one tested
+    function prevents the targeting pipeline from silently changing estimands.
+    """
+
+    y = np.asarray(y, dtype=float)
+    treatment = np.asarray(treatment, dtype=float)
+    mu0 = np.asarray(mu0, dtype=float)
+    mu1 = np.asarray(mu1, dtype=float)
+    propensity = np.asarray(propensity, dtype=float)
+    if propensity.ndim == 0:
+        propensity = np.full_like(y, propensity)
+    if not (y.shape == treatment.shape == mu0.shape == mu1.shape == propensity.shape):
+        raise ValueError("All AIPW inputs must have the same shape")
+    if np.any((propensity <= 0) | (propensity >= 1)):
+        raise ValueError("Propensity must be strictly between zero and one")
+    return (
+        mu1
+        - mu0
+        + treatment * (y - mu1) / propensity
+        - (1 - treatment) * (y - mu0) / (1 - propensity)
+    )

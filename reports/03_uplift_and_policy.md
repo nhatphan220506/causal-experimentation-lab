@@ -10,7 +10,8 @@ features identify a population with greater incremental response?
 - 3,000,000 rows train treatment and control outcome models.
 - A disjoint 3,000,000-row randomized holdout evaluates every claim.
 - A visit T-learner predicts `P(Y=1|X,Z=1) − P(Y=1|X,Z=0)`.
-- A separately trained propensity model supports IPW and doubly robust checks.
+- The known 85/15 randomization probability supports primary IPW and doubly robust
+  checks; a separately trained propensity model is diagnostic only.
 - Decile effects are observed holdout IPW estimates, not model predictions.
 - Visit was fixed as the ranking outcome before evaluation; sparse conversion is
   retained as a broad business outcome, not mined across deciles.
@@ -23,10 +24,15 @@ outcome is only 0.038; high AUC is therefore never presented as proof of uplift.
 
 ![Holdout uplift deciles](figures/03_holdout_uplift_deciles.png)
 
-The top predicted decile has a holdout IPW visit effect of **+5.79 percentage
-points** (approximate 95% CI +5.28 to +6.31). The second decile is +0.91 points;
-most remaining deciles are close to zero. The bottom decile is slightly positive,
-which is a useful warning that the model is not a perfectly monotonic oracle.
+The top predicted decile has a holdout IPW visit effect of **+8.53 percentage
+points** (approximate 95% CI +8.06 to +9.01). The second decile is +0.97 points;
+most remaining deciles are close to zero.
+
+The most important failure mode is at the bottom: the model predicts **−0.74 pp**
+mean uplift, while randomized holdout outcomes estimate **+0.35 pp** (approximate
+95% CI +0.07 to +0.64). The model therefore does **not** identify a harmed subgroup.
+It may prioritize opportunity, but it must not be used to suppress treatment on an
+individual-harm claim.
 
 ## Capacity frontier
 
@@ -34,12 +40,12 @@ which is a useful warning that the model is not a perfectly monotonic oracle.
 
 | Target share | Visit effect among targeted | Visits / 100k targeted | Visits / 100k eligible |
 |---:|---:|---:|---:|
-| 10% | +5.79 pp | +5,795 | +579 |
-| 20% | +3.35 pp | +3,353 | +671 |
-| 50% | +1.40 pp | +1,397 | +698 |
-| 100% | +0.74 pp | +741 | +741 |
+| 10% | +8.54 pp | +8,536 | +854 |
+| 20% | +4.75 pp | +4,750 | +950 |
+| 50% | +1.95 pp | +1,951 | +975 |
+| 100% | +1.02 pp | +1,016 | +1,016 |
 
-Targeting the top 10% is roughly 7.8× as efficient per treatment as treating
+Targeting the top 10% is roughly 8.4× as efficient per treatment as treating
 everyone, but broad treatment produces more total incremental visits in the
 eligible population. Therefore:
 
@@ -47,7 +53,8 @@ eligible population. Therefore:
 - with material per-treatment cost, choose the point whose lower-bound value
   exceeds cost;
 - with negligible cost and no harm, broad assignment maximises total impact;
-- do not deploy the model until ranking replicates in a second trial or period.
+- do not deploy the model until ranking replicates in a second trial or period and
+  the raw-versus-adjusted ATE gap is resolved from trial-level assignment metadata.
 
 ## Why this is not a persona exercise
 
@@ -55,4 +62,3 @@ Features are anonymised. Naming the top decile “high intent”, “premium”,
 other behavioural segment would be invented. The output is a validated ranking
 policy; product interpretation requires a dataset with semantic features and user
 research.
-

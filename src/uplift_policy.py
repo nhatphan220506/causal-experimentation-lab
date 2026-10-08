@@ -1,4 +1,5 @@
 import argparse
+import json
 
 import numpy as np
 import pandas as pd
@@ -6,13 +7,14 @@ from sklearn.ensemble import HistGradientBoostingClassifier
 from sklearn.metrics import log_loss, roc_auc_score
 
 from src.config import (
+    EXPECTED_TREATMENT_SHARE,
     FEATURES,
     GENERATED_DIR,
     RANDOM_SEED,
     ensure_output_dirs,
 )
 from src.io_utils import connection, relation_sql, write_json
-from src.statistics import ipw_subgroup_effect
+from src.statistics import augmented_ipw_score, ipw_subgroup_effect
 
 
 def load_split(limit: int, split: int) -> pd.DataFrame:
@@ -87,9 +89,13 @@ def main() -> None:
     conversion = evaluate.conversion.to_numpy()
     treatment = evaluate.treatment.to_numpy()
     marginal_propensity = float(treatment.mean())
-    propensity = np.clip(
+    learned_propensity = np.clip(
         propensity_model.predict_proba(evaluate[FEATURES])[:, 1], 0.02, 0.98
     )
+    # Assignment is randomized with a published 85/15 probability.  A fitted
+    # propensity is a diagnostic only; using it as the primary weight needlessly
+    # adds estimation noise and previously obscured the holdout-vs-full-sample gap.
+    known_propensity = EXPECTED_TREATMENT_SHARE
 
     evaluate = evaluate.assign(predicted_uplift=uplift)
     evaluate["uplift_decile"] = pd.qcut(
@@ -99,7 +105,7 @@ def main() -> None:
     for decile in range(9, -1, -1):
         subset = evaluate.uplift_decile.to_numpy() == decile
         effect, se, n = ipw_subgroup_effect(
-            outcome, treatment, subset, propensity
+            outcome, treatment, subset, known_propensity
         )
         deciles.append(
             {
@@ -117,7 +123,7 @@ def main() -> None:
         selected = np.zeros(len(evaluate), dtype=bool)
         selected[ranking[: int(len(evaluate) * fraction)]] = True
         effect, se, n = ipw_subgroup_effect(
-            outcome, treatment, selected, propensity
+            outcome, treatment, selected, known_propensity
         )
         policy_curve.append(
             {
@@ -130,27 +136,30 @@ def main() -> None:
             }
         )
 
-    dr_score = (
-        p1
-        - p0
-        + treatment * (outcome - p1) / propensity
-        - (1 - treatment) * (outcome - p0) / (1 - propensity)
+    dr_score = augmented_ipw_score(outcome, treatment, p0, p1, known_propensity)
+    learned_propensity_dr_score = augmented_ipw_score(
+        outcome, treatment, p0, p1, learned_propensity
     )
     c0 = conversion_models[0].predict_proba(evaluate[FEATURES])[:, 1]
     c1 = conversion_models[1].predict_proba(evaluate[FEATURES])[:, 1]
-    conversion_dr_score = (
-        c1
-        - c0
-        + treatment * (conversion - c1) / propensity
-        - (1 - treatment) * (conversion - c0) / (1 - propensity)
+    conversion_dr_score = augmented_ipw_score(
+        conversion, treatment, c0, c1, known_propensity
     )
+    holdout_unadjusted_ate = float(outcome[treatment == 1].mean() - outcome[treatment == 0].mean())
+    holdout_unadjusted_conversion_ate = float(
+        conversion[treatment == 1].mean() - conversion[treatment == 0].mean()
+    )
+    ate_path = GENERATED_DIR / "ate_results.json"
+    full_sample_ate = json.loads(ate_path.read_text()) if ate_path.exists() else None
     diagnostics = {
         "train_rows": len(train),
         "evaluation_rows": len(evaluate),
         "evaluation_marginal_propensity": marginal_propensity,
-        "propensity_auc": float(roc_auc_score(treatment, propensity)),
-        "propensity_p01": float(np.quantile(propensity, 0.01)),
-        "propensity_p99": float(np.quantile(propensity, 0.99)),
+        "primary_propensity": known_propensity,
+        "learned_propensity_role": "diagnostic_only",
+        "learned_propensity_auc": float(roc_auc_score(treatment, learned_propensity)),
+        "learned_propensity_p01": float(np.quantile(learned_propensity, 0.01)),
+        "learned_propensity_p99": float(np.quantile(learned_propensity, 0.99)),
         "out_of_sample_observed_auc": float(roc_auc_score(outcome, observed)),
         "out_of_sample_observed_log_loss": float(log_loss(outcome, observed)),
         "cross_fitted_dr_ate": float(dr_score.mean()),
@@ -159,11 +168,18 @@ def main() -> None:
         "cross_fitted_conversion_dr_standard_error": float(
             conversion_dr_score.std(ddof=1) / np.sqrt(len(conversion_dr_score))
         ),
+        "learned_propensity_dr_ate_sensitivity": float(learned_propensity_dr_score.mean()),
+        "holdout_unadjusted_ate": holdout_unadjusted_ate,
+        "holdout_unadjusted_conversion_ate": holdout_unadjusted_conversion_ate,
+        "full_sample_itt": full_sample_ate["visit"]["absolute_effect"] if full_sample_ate else None,
+        "full_sample_conversion_itt": (
+            full_sample_ate["conversion"]["absolute_effect"] if full_sample_ate else None
+        ),
         "uplift_correlation_with_ipw_score": float(
             np.corrcoef(
                 uplift,
-                treatment * outcome / propensity
-                - (1 - treatment) * outcome / (1 - propensity),
+                treatment * outcome / known_propensity
+                - (1 - treatment) * outcome / (1 - known_propensity),
             )[0, 1]
         ),
         "warning": (
